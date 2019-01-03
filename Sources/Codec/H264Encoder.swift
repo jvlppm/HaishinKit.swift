@@ -8,18 +8,18 @@ protocol VideoEncoderDelegate: class {
 }
 
 // MARK: -
-final class H264Encoder: NSObject {
-    static let supportedSettingsKeys: [String] = [
-        "muted",
-        "width",
-        "height",
-        "bitrate",
-        "profileLevel",
-        "dataRateLimits",
-        "enabledHardwareEncoder", // macOS only
-        "maxKeyFrameIntervalDuration",
-        "scalingMode"
-    ]
+final public class H264Encoder: NSObject, SettingKeyConvertible {
+    public enum SettingKey: String, CaseIterable {
+        case muted
+        case width
+        case height
+        case bitrate
+        case profileLevel
+        case dataRateLimits
+        case enabledHardwareEncoder
+        case maxKeyFrameIntervalDuration
+        case scalingMode
+    }
 
     static let defaultWidth: Int32 = 480
     static let defaultHeight: Int32 = 272
@@ -131,7 +131,7 @@ final class H264Encoder: NSObject {
     }
     weak var delegate: VideoEncoderDelegate?
 
-    internal(set) var isRunning: Bool = false
+    internal(set) public var isRunning: Bool = false
     private var supportedProperty: [AnyHashable: Any]? = nil {
         didSet {
             guard logger.isEnabledFor(level: .info) else {
@@ -297,7 +297,7 @@ final class H264Encoder: NSObject {
 
 extension H264Encoder: Running {
     // MARK: Running
-    func startRunning() {
+    public func startRunning() {
         lockQueue.async {
             self.isRunning = true
 #if os(iOS)
@@ -317,7 +317,7 @@ extension H264Encoder: Running {
         }
     }
 
-    func stopRunning() {
+    public func stopRunning() {
         lockQueue.async {
             self.session = nil
             self.lastImageBuffer = nil

@@ -6,14 +6,13 @@ import AVFoundation
     }
 #endif
 
-final public class AVMixer: NSObject {
-
-    static let supportedSettingsKeys: [String] = [
-        "fps",
-        "sessionPreset",
-        "continuousAutofocus",
-        "continuousExposure"
-    ]
+final public class AVMixer: NSObject, SettingKeyConvertible {
+    public enum SettingKey: String, CaseIterable {
+        case fps
+        case sessionPreset
+        case continuousAutofocus
+        case continuousExposure
+    }
 
     static let defaultFPS: Float64 = 30
     static let defaultVideoSettings: [NSString: AnyObject] = [

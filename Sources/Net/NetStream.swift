@@ -69,11 +69,11 @@ open class NetStream: NSObject {
     }
     #endif
 
-    open var audioSettings: [String: Any] {
+    open var audioSettings: [AudioConverter.SettingKey: Any] {
         get {
-            var audioSettings: [String: Any]!
+            var audioSettings: [AudioConverter.SettingKey: Any]!
             ensureLockQueue {
-                audioSettings = self.mixer.audioIO.encoder.dictionaryWithValues(forKeys: AudioConverter.supportedSettingsKeys)
+                audioSettings = self.mixer.audioIO.encoder.dictionaryWithValues(forKeys: AudioConverter.SettingKey.allCases)
             }
             return  audioSettings
         }
@@ -84,11 +84,11 @@ open class NetStream: NSObject {
         }
     }
 
-    open var videoSettings: [String: Any] {
+    open var videoSettings: [H264Encoder.SettingKey: Any] {
         get {
-            var videoSettings: [String: Any]!
+            var videoSettings: [H264Encoder.SettingKey: Any]!
             ensureLockQueue {
-                videoSettings = self.mixer.videoIO.encoder.dictionaryWithValues(forKeys: H264Encoder.supportedSettingsKeys)
+                videoSettings = self.mixer.videoIO.encoder.dictionaryWithValues(forKeys: H264Encoder.SettingKey.allCases)
             }
             return videoSettings
         }
@@ -103,11 +103,11 @@ open class NetStream: NSObject {
         }
     }
 
-    open var captureSettings: [String: Any] {
+    open var captureSettings: [AVMixer.SettingKey: Any] {
         get {
-            var captureSettings: [String: Any]!
+            var captureSettings: [AVMixer.SettingKey: Any]!
             ensureLockQueue {
-                captureSettings = self.mixer.dictionaryWithValues(forKeys: AVMixer.supportedSettingsKeys)
+                captureSettings = self.mixer.dictionaryWithValues(forKeys: AVMixer.SettingKey.allCases)
             }
             return captureSettings
         }

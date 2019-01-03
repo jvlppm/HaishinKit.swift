@@ -47,16 +47,16 @@ final class LiveViewController: UIViewController {
         rtmpStream = RTMPStream(connection: rtmpConnection)
         rtmpStream.syncOrientation = true
         rtmpStream.captureSettings = [
-            "sessionPreset": AVCaptureSession.Preset.hd1280x720.rawValue,
-            "continuousAutofocus": true,
-            "continuousExposure": true
+            .sessionPreset: AVCaptureSession.Preset.hd1280x720.rawValue,
+            .continuousAutofocus: true,
+            .continuousExposure: true
         ]
         rtmpStream.videoSettings = [
-            "width": 720,
-            "height": 1280
+            .width: 720,
+            .height: 1280
         ]
         rtmpStream.audioSettings = [
-            "sampleRate": sampleRate
+            .sampleRate: sampleRate
         ]
         rtmpStream.mixer.recorder.delegate = ExampleRecorderDelegate()
 
@@ -101,11 +101,11 @@ final class LiveViewController: UIViewController {
     @IBAction func on(slider: UISlider) {
         if slider == audioBitrateSlider {
             audioBitrateLabel?.text = "audio \(Int(slider.value))/kbps"
-            rtmpStream.audioSettings["bitrate"] = slider.value * 1024
+            rtmpStream.audioSettings[.bitrate] = slider.value * 1024
         }
         if slider == videoBitrateSlider {
             videoBitrateLabel?.text = "video \(Int(slider.value))/kbps"
-            rtmpStream.videoSettings["bitrate"] = slider.value * 1024
+            rtmpStream.videoSettings[.bitrate] = slider.value * 1024
         }
         if slider == zoomSlider {
             rtmpStream.setZoomFactor(CGFloat(slider.value), ramping: true, withRate: 5.0)
@@ -161,11 +161,11 @@ final class LiveViewController: UIViewController {
     @IBAction func onFPSValueChanged(_ segment: UISegmentedControl) {
         switch segment.selectedSegmentIndex {
         case 0:
-            rtmpStream.captureSettings["fps"] = 15.0
+            rtmpStream.captureSettings[.fps] = 15.0
         case 1:
-            rtmpStream.captureSettings["fps"] = 30.0
+            rtmpStream.captureSettings[.fps] = 30.0
         case 2:
-            rtmpStream.captureSettings["fps"] = 60.0
+            rtmpStream.captureSettings[.fps] = 60.0
         default:
             break
         }

@@ -10,7 +10,14 @@ protocol AudioConverterDelegate: class {
  - seealse:
   - https://developer.apple.com/library/ios/technotes/tn2236/_index.html
  */
-final class AudioConverter: NSObject {
+public class AudioConverter: NSObject, SettingKeyConvertible {
+    public enum SettingKey: String, CaseIterable {
+        case muted
+        case bitrate
+        case sampleRate
+        case actualBitrate
+    }
+
     enum Error: Swift.Error {
         case setPropertyError(id: AudioConverterPropertyID, status: OSStatus)
     }
@@ -115,13 +122,6 @@ final class AudioConverter: NSObject {
         }
     }
 
-    static let supportedSettingsKeys: [String] = [
-        "muted",
-        "bitrate",
-        "sampleRate", // down,up sampleRate not supported yet #58
-        "actualBitrate"
-    ]
-
     static let minimumBitrate: UInt32 = 8 * 1024
     static let defaultBitrate: UInt32 = 32 * 1024
     // 0 means according to a input source
@@ -164,7 +164,7 @@ final class AudioConverter: NSObject {
     }
     var lockQueue = DispatchQueue(label: "com.haishinkit.HaishinKit.AudioConverter.lock")
     weak var delegate: AudioConverterDelegate?
-    internal(set) var isRunning: Bool = false
+    internal(set) public var isRunning: Bool = false
     private var maximumBuffers: Int = AudioConverter.defaultMaximumBuffers
     private var bufferListSize: Int = AudioConverter.defaultBufferListSize
     private var currentBufferList: UnsafeMutableAudioBufferListPointer?
@@ -395,12 +395,12 @@ final class AudioConverter: NSObject {
 
 extension AudioConverter: Running {
     // MARK: Running
-    func startRunning() {
+    public func startRunning() {
         lockQueue.async {
             self.isRunning = true
         }
     }
-    func stopRunning() {
+    public func stopRunning() {
         lockQueue.async {
             if let convert: AudioQueueRef = self._converter {
                 AudioConverterDispose(convert)
