@@ -26,6 +26,6 @@ final class RTMPHandshake {
     }
 
     func clear() {
-        timestamp = 0
+        timestamp = Date().timeIntervalSince1970
     }
 }
